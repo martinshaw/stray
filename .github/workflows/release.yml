@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Test
+        run: go test ./...
+
+  build:
+    needs: test
+    name: ${{ matrix.goos }}-${{ matrix.goarch }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+          - goos: linux
+            goarch: arm64
+          - goos: darwin
+            goarch: amd64
+          - goos: darwin
+            goarch: arm64
+          - goos: windows
+            goarch: amd64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Build
+        shell: bash
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: |
+          set -euo pipefail
+          ext=""
+          if [ "${GOOS}" = "windows" ]; then
+            ext=".exe"
+          fi
+          ver="${GITHUB_REF_NAME#v}"
+          out="stray-${GOOS}-${GOARCH}${ext}"
+          go build -trimpath -ldflags "-s -w -X github.com/martinshaw/stray/internal/version.Version=${ver}" -o "${out}" ./cmd/stray
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stray-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: stray-*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd dist
+          sha256sum stray-* > SHA256SUMS
+          gh release create "${GITHUB_REF_NAME}" stray-* SHA256SUMS \
+            --title "${GITHUB_REF_NAME}" \
+            --notes "stray ${GITHUB_REF_NAME}
+
+          Static binaries with no runtime dependencies.
+          Pick the archive that matches your OS and architecture, then put the stray binary on your PATH."
