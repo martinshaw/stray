@@ -2,4 +2,4 @@
 package version
 
 // Version is the stray release version. Release builds override it with -ldflags -X.
-var Version = "0.1.0"
+var Version = "0.1.1"

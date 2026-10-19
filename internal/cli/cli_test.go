@@ -57,7 +57,7 @@ func TestDemoProject(t *testing.T) {
 	if err := json.Unmarshal([]byte(stdout), &rep); err != nil {
 		t.Fatal(err, stdout)
 	}
-	if rep.Version != "0.1.0" || rep.Detected.Resolution != "bundler" || rep.Detected.Bundler != "vite" {
+	if rep.Version != "0.1.1" || rep.Detected.Resolution != "bundler" || rep.Detected.Bundler != "vite" {
 		t.Fatalf("%+v", rep.Detected)
 	}
 	found := map[string]bool{}
@@ -92,7 +92,7 @@ func TestDemoProject(t *testing.T) {
 	if code != 1 {
 		t.Fatal(code, stderr)
 	}
-	for _, part := range []string{"stray 0.1.0", "├──", "└──", "case-mismatch", "exports-denied", "resolution bundler"} {
+	for _, part := range []string{"stray 0.1.1", "├──", "└──", "case-mismatch", "exports-denied", "resolution bundler"} {
 		if !strings.Contains(stdout, part) {
 			t.Fatalf("tree missing %q\n%s", part, stdout)
 		}
