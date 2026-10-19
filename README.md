@@ -3,7 +3,7 @@
 `stray` reports JavaScript, TypeScript, Vue, and Svelte imports that do not land on a real file. It is a single static binary with no runtime dependencies. Point it at a repository and it reads the config that is actually there: `package.json`, `tsconfig` / `jsconfig`, Vite, webpack, Nuxt, pnpm workspaces, and Node's `exports` / `imports` maps.
 
 ```text
-stray 0.1.0
+stray 0.1.1
 6 scanned · 4 errors · 4 warnings · 2 files
 resolution bundler
 bundler vite
@@ -36,7 +36,7 @@ That sample is `testdata/demo`. `fs`, `node:path`, `boxed`, `@/Widget`, and `vir
 Download a binary from the [releases](https://github.com/martinshaw/stray/releases), or build it yourself:
 
 ```sh
-go install github.com/martinshaw/stray/cmd/stray@v0.1.0
+go install github.com/martinshaw/stray/cmd/stray@v0.1.1
 ```
 
 `go install` still produces one binary. The module has no third-party dependencies.
@@ -80,7 +80,7 @@ stray -ignore '**/*.test.ts' -ext .vue,.ts
 | `-no-case` | off | Skip filename case checks |
 | `-no-ignore` | off | Also walk `node_modules`, `dist`, and other build directories |
 | `-no-eval` | off | Do not run Node to evaluate a bundler config |
-| `-version` | | Print `0.1.0` and exit |
+| `-version` | | Print `0.1.1` and exit |
 
 ### Formats
 
@@ -137,6 +137,16 @@ stray -root testdata/demo -no-eval -no-color
 ```
 
 `testdata/demo/node_modules` is a fixture, not an installed tree. It is there so the package checks have something to resolve.
+
+## License
+
+Copyright (C) 2026 Martin Shaw.
+
+stray is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+The full text is in [LICENSE](LICENSE). The source repository is public: <https://github.com/martinshaw/stray>.
 
 ## Development
 
