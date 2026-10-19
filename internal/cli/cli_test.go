@@ -177,7 +177,7 @@ func TestReleaseWorkflowMentionsBinaries(t *testing.T) {
 		t.Fatal(err)
 	}
 	text := string(buf)
-	for _, part := range []string{"go build", "GOOS", "GOARCH", "contents: write", "gh release create", "v*", "go test ./..."} {
+	for _, part := range []string{"go build", "GOOS", "GOARCH", "contents: write", "gh release create", "GH_REPO", "v*", "go test ./..."} {
 		if !strings.Contains(text, part) {
 			t.Fatalf("workflow missing %s", part)
 		}
