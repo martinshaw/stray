@@ -1,0 +1,26 @@
+import { widget } from "./Widget";
+import { widget as again } from "./widget";
+import missing from "@/missing";
+import leftPad from "left-pad";
+import boxed from "boxed";
+import secret from "boxed/secret";
+import fs from "fs";
+import path from "node:path";
+const label = "import './not-real'";
+// import "./also-not-real";
+import.meta.glob("./pages/*.ts");
+import.meta.glob("./no-pages/*.ts");
+const name = "home";
+import(`./pages/${name}.ts`);
+import "virtual:icons";
+
+void widget;
+void again;
+void missing;
+void leftPad;
+void boxed;
+void secret;
+void fs;
+void path;
+void label;
+void name;
